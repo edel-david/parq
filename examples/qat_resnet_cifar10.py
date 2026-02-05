@@ -143,7 +143,7 @@ def main(args):
             quant_period=args.quant_period,
             quant_per_channel=args.quant_per_channel,
             quant_shrink=args.quant_shrink,
-            anneal_wd_frac=args.anneal_wd_frac,
+            #anneal_wd_frac=args.anneal_wd_frac,
             nm_gamma=args.nm_gamma,
         )
 
@@ -262,6 +262,7 @@ def create_data_loaders(
             batch_size=batch_size,
             num_workers=num_workers,
             pin_memory=True,
+            persistent_workers=True
         )
     else:
         train_loader = None
@@ -278,6 +279,7 @@ def create_data_loaders(
         batch_size=batch_size,
         num_workers=num_workers,
         pin_memory=True,
+        persistent_workers=True,
     )
 
     return train_loader, val_loader
@@ -488,5 +490,16 @@ def get_arg_parser():
 
 if __name__ == "__main__":
     parser = get_arg_parser()
+    os.environ["LOCAL_RANK"]="0"
+    os.environ["RANK"]="0"
+    os.environ["WORLD_SIZE"]="1"
+    os.environ["MASTER_ADDR"]="127.0.0.1"
+    os.environ["MASTER_PORT"]="29500"
+
+
     args = parser.parse_args()
-    main(args)
+    for i in range(5):
+        args.seed = torch.randint(0,10000,(1,)).item()
+        print(i," seed: ",args.seed)
+
+        main(args)
