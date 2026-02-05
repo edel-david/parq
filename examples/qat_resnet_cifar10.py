@@ -143,7 +143,7 @@ def main(args):
             quant_period=args.quant_period,
             quant_per_channel=args.quant_per_channel,
             quant_shrink=args.quant_shrink,
-            #anneal_wd_frac=args.anneal_wd_frac,
+            anneal_wd_frac=args.anneal_wd_frac,
             nm_gamma=args.nm_gamma,
         )
 
